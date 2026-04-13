@@ -702,6 +702,14 @@ function getImageUrl(seed, width, height) {
     return `https://picsum.photos/seed/${seed}/${width}/${height}`;
 }
 
+function slugify(text) {
+    return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+function getArticleBySlug(slug) {
+    return articles.find(a => slugify(a.title) === slug);
+}
+
 function getFilteredArticles() {
     let filtered = [...shuffledArticles];
     if (currentCategory !== 'all') {
@@ -894,24 +902,30 @@ function renderArticlePage(articleId) {
 // ============================================
 
 function navigateToArticle(id) {
-    window.location.hash = `article-${id}`;
+    const article = articles.find(a => a.id === id);
+    if (!article) return;
+    history.pushState(null, '', '/' + slugify(article.title));
+    handleRoute();
 }
 
 function goHome() {
-    window.location.hash = '';
+    history.pushState(null, '', '/');
+    handleRoute();
 }
 
 function handleRoute() {
-    const hash = window.location.hash;
-    const match = hash.match(/^#article-(\d+)$/);
-
-    if (match) {
-        currentView = 'article';
-        renderArticlePage(parseInt(match[1], 10));
-    } else {
-        currentView = 'home';
-        renderHomePage();
+    const path = window.location.pathname;
+    if (path && path !== '/') {
+        const slug = path.replace(/^\//, '');
+        const article = getArticleBySlug(slug);
+        if (article) {
+            currentView = 'article';
+            renderArticlePage(article.id);
+            return;
+        }
     }
+    currentView = 'home';
+    renderHomePage();
 }
 
 // ============================================
@@ -929,7 +943,7 @@ document.getElementById('main-nav').addEventListener('click', (e) => {
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
 
-        window.location.hash = '';
+        history.pushState(null, '', '/');
         renderHomePage();
     }
 });
@@ -948,7 +962,7 @@ document.querySelector('.site-footer').addEventListener('click', (e) => {
             b.classList.toggle('active', b.dataset.category === cat);
         });
 
-        window.location.hash = '';
+        history.pushState(null, '', '/');
         renderHomePage();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -961,7 +975,7 @@ document.getElementById('search-input').addEventListener('input', (e) => {
     searchTimeout = setTimeout(() => {
         searchQuery = e.target.value.trim();
         if (currentView === 'article' && searchQuery) {
-            window.location.hash = '';
+            history.pushState(null, '', '/');
         }
         renderHomePage();
     }, 250);
@@ -977,7 +991,7 @@ document.getElementById('logo-link').addEventListener('click', (e) => {
         b.classList.toggle('active', b.dataset.category === 'all');
     });
     shuffledArticles = shuffleArray(articles);
-    window.location.hash = '';
+    history.pushState(null, '', '/');
     renderHomePage();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
@@ -988,7 +1002,7 @@ document.getElementById('mobile-menu-btn').addEventListener('click', () => {
 });
 
 // Hash change
-window.addEventListener('hashchange', handleRoute);
+window.addEventListener('popstate', handleRoute);
 
 // ============================================
 // Initialize
