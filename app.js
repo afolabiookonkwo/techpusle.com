@@ -665,7 +665,7 @@ const articles = [
 <p>Thomson has been linked to multiple identities, including the alias Plamen Georgiev, and is reported to go by the nicknames "Freddie" and "Fred." Investigators have noted connections to Dubai and Spain's Costa del Sol region among his known travel history. He is described as married and an English speaker.</p>
 <p>An Interpol Red Notice, while not an international arrest warrant, serves as a formal request to law enforcement agencies worldwide to locate and provisionally detain an individual pending extradition proceedings. The issuance of such a notice signals a significant level of concern on the part of the requesting nation.</p>
 <p>Legal analysts say the substantial bail sum and strict travel restrictions underscore both the cross-border complexity of the case and concerns over Thomson's potential flight risk, given his apparent familiarity with multiple jurisdictions. Thomson is expected to remain under judicial supervision in the UAE as authorities coordinate with their British counterparts over the next steps. Further hearings are anticipated in the coming weeks.</p>`,
-    imageId: "https://images.unsplash.com/photo-1453873531674-2151bcd01707?w=1000&h=600&fit=crop&q=80"
+    imageId: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1000&h=600&fit=crop&q=80"
   }
 ];
 
